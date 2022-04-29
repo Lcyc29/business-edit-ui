@@ -124,6 +124,7 @@
           :activeIndex="activeIndex"
           :currentCompletingParty="currentCompletingParty"
           :validate="getComponentValidate"
+          :hasMinimumPartners="hasMinimumPartners"
           @initEdit="initEdit($event)"
           @addEdit="addEdit($event)"
           @remove="remove($event)"
