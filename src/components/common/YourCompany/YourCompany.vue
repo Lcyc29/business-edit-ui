@@ -316,7 +316,7 @@ import { CommonMixin, SharedMixin, DateMixin, LegalApiMixin, NameRequestMixin } 
 import { CorrectionTypes } from '@/enums/'
 import { CorpTypeCd } from '@bcrs-shared-components/corp-type-module/'
 import { cloneDeep } from 'lodash'
-import { ConversionNOB } from '../../Conversion'
+import { ConversionNOB } from '@/components/Conversion'
 
 /** Note: this component is used by both corrections and alterations. */
 @Component({
