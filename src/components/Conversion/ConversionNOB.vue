@@ -29,7 +29,7 @@
               label="Enter Nature of Business"
               rows="3"
               v-model="naicsText"
-              :counter="300"
+              counter="300"
               :rules="naicsRules"
               validate-on-blur
             >
