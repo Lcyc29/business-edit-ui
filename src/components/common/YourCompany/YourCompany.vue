@@ -254,7 +254,7 @@
         <ConversionNOB
           class="section-container"
           :class="{'invalid-section': invalidNatureOfBusiness}"
-          :invalidSection="invalidNatureOfBusiness"
+          @haveChanges="conversionNOBChanges = $event"
         />
       </template>
     </template>
@@ -376,6 +376,7 @@ export default class YourCompany extends Mixins(
   private companyTypeChanges = false
   private nameTranslationChanges = false
   private officeAddressChanges = false
+  private conversionNOBChanges = false
 
   private correctNameChoices: Array<string> = []
   private isEditingNames = false
@@ -499,13 +500,15 @@ export default class YourCompany extends Mixins(
   @Watch('companyTypeChanges') private onCompanyTypeChanges ():void { this.setDataChanges() }
   @Watch('nameTranslationChanges') private onNameTranslationChanges ():void { this.setDataChanges() }
   @Watch('officeAddressChanges') private onOfficeAddressChanges ():void { this.setDataChanges() }
+  @Watch('conversionNOBChanges') private onconversionNOBChanges ():void { this.setDataChanges() }
 
   private setDataChanges (): void {
     const haveChanges = (
       this.companyNameChanges ||
       this.companyTypeChanges ||
       this.nameTranslationChanges ||
-      this.officeAddressChanges
+      this.officeAddressChanges ||
+      this.conversionNOBChanges
     )
     this.setDefineCompanyStepChanged(haveChanges)
     this.emitHaveChanges(haveChanges)
