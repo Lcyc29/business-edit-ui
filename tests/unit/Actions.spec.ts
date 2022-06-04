@@ -234,6 +234,7 @@ describe.skip('Emits error event if NR validation fails in file and pay', () => 
 
   sessionStorage.setItem('AUTH_WEB_URL', 'https://auth.web.url/')
   sessionStorage.setItem('DASHBOARD_URL', 'https://dashboard.url/')
+  sessionStorage.setItem('CURRENT_ACCOUNT', '{ "id": "" }')
 
   beforeEach(async () => {
     // mock the window.location.assign function

@@ -93,6 +93,7 @@ describe('Folio Information component', () => {
 
   it('updates folio number for an alteration', async () => {
     sessionStorage.setItem('AUTH_API_URL', `myhost/basePath/auth/`)
+    sessionStorage.setItem('CURRENT_ACCOUNT', '{ "id": "" }')
     store.state.stateModel.tombstone.businessId = 'BC1234567'
     store.state.stateModel.tombstone.filingType = 'alteration'
     store.state.stateModel.originalIA.header.folioNumber = ''
