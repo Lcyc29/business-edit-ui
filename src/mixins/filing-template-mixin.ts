@@ -6,7 +6,8 @@ import { ActionBindingIF, AddressesIF, AlterationFilingIF, CertifyIF, Correction
   EntitySnapshotIF, ChgRegistrationFilingIF, ConversionFilingIF, NameRequestIF, NameTranslationIF,
   OrgPersonIF, ShareClassIF } from '@/interfaces/'
 import { CompletingPartyIF, ContactPointIF, NaicsIF, StaffPaymentIF } from '@bcrs-shared-components/interfaces/'
-import { ActionTypes, CorrectionErrorTypes, EffectOfOrders, FilingTypes, PartyTypes, RoleTypes } from '@/enums/'
+import { ActionTypes, CorrectionErrorTypes, EffectOfOrders, FilingTypes, PartyTypes, RoleTypes
+} from '@/enums/'
 import { CorpTypeCd } from '@bcrs-shared-components/corp-type-module/'
 import { StaffPaymentOptions } from '@bcrs-shared-components/enums/'
 
@@ -117,6 +118,14 @@ export default class FilingTemplateMixin extends Mixins(DateMixin) {
       parties = parties.filter(x => !x.actions?.includes(ActionTypes.REMOVED))
         .map((x) => { const { actions, ...rest } = x; return rest })
 
+      // Set streetAddressAdditional to empty string if it's null
+      parties.map((x) => {
+        let newX = x
+        if (!newX.deliveryAddress.streetAddressAdditional) newX.deliveryAddress.streetAddressAdditional = ''
+        if (!newX.mailingAddress.streetAddressAdditional) newX.mailingAddress.streetAddressAdditional = ''
+        return newX
+      })
+
       // Filter out removed classes and delete "action" property
       shareClasses = shareClasses.filter(x => x.action !== ActionTypes.REMOVED)
         .map((x) => { const { action, ...rest } = x; return rest })
@@ -176,6 +185,41 @@ export default class FilingTemplateMixin extends Mixins(DateMixin) {
         parties,
         shareStructure: { shareClasses }
       }
+      // changeofRegistration: !isChangeReg ? undefined : {
+      //   business: {
+      //     identifier: this.getBusinessId,
+      //     naics: this.getCurrentNaics
+      //   },
+      //   offices: this.getOfficeAddresses,
+      //   contactPoint: {
+      //     email: this.getBusinessContact.email,
+      //     phone: this.getBusinessContact.phone,
+      //     ...this.getBusinessContact.extension
+      //       ? { extension: +this.getBusinessContact.extension }
+      //       : {}
+      //   },
+      //   parties: this.getPeopleAndRoles
+      // },
+      // registration: !isRegistration ? undefined : {
+      //   business: {
+      //     identifier: this.getBusinessId,
+      //     naics: this.getCurrentNaics
+      //   },
+      //   contactPoint: {
+      //     email: this.getBusinessContact.email,
+      //     phone: this.getBusinessContact.phone,
+      //     ...this.getBusinessContact.extension
+      //       ? { extension: +this.getBusinessContact.extension }
+      //       : {}
+      //   },
+      //   nameRequest: {
+      //     legalType: this.getEntityType,
+      //     legalName: this.getApprovedName,
+      //     nrNumber: this.getNameRequestNumber
+      //   },
+      //   offices: this.getOfficeAddresses,
+      //   parties: this.getPeopleAndRoles
+      // }
     }
 
     // add in Registration data
