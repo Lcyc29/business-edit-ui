@@ -662,6 +662,11 @@ export default class FilingTemplateMixin extends Mixins(DateMixin) {
 
     // store Staff Payment
     this.storeStaffPayment(filing)
+
+    // Store NAICS
+    if (filing.registration.business.naics) {
+      this.setNaics(filing.registration.business.naics)
+    }
   }
 
   /**
