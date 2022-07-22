@@ -24,6 +24,7 @@ export interface CorrectionInformationIF {
   business?: {
     naicsCode: string
     naicsDescription: string
+    identifier?: string
   }
   contactPoint?: ContactPointIF
   nameRequest?: {
@@ -39,4 +40,5 @@ export interface CorrectionInformationIF {
     resolutionDates?: string[]
   }
   startDate?: string // API format
+  legalType?: CorpTypeCd
 }

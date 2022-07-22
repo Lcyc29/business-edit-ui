@@ -55,6 +55,7 @@ export default class FilingTemplateMixin extends Mixins(DateMixin) {
   @Getter isEntityTypeCP!: boolean
   @Getter isEntityTypeSP!: boolean
   @Getter isEntityTypeGP!: boolean
+  @Getter getBusinessFoundingDate!: string
 
   // Global actions
   @Action setBusinessContact!: ActionBindingIF
@@ -149,8 +150,8 @@ export default class FilingTemplateMixin extends Mixins(DateMixin) {
         comment: `${this.defaultCorrectionDetailComment}\n${this.getDetailComment}`,
         contactPoint: this.getContactPoint,
         nameRequest: this.getNameRequest,
-        offices: this.getOfficeAddresses,
-        parties: parties,
+        offices: this.returnOfficeAddresses(this.getOfficeAddresses),
+        parties: this.returnParties(parties),
         type: this.getCorrectionErrorType
       }
     }
@@ -178,10 +179,15 @@ export default class FilingTemplateMixin extends Mixins(DateMixin) {
 
     // add in Registration data
     if (this.isCorrectedRegistration) {
+      filing.business.foundingDate = this.getBusinessFoundingDate
       filing.correction.business = {
         naicsCode: this.getCurrentNaics.naicsCode,
-        naicsDescription: this.getCurrentNaics.naicsDescription
+        naicsDescription: this.getCurrentNaics.naicsDescription,
+        identifier: this.getBusinessId
       }
+      filing.correction.startDate = this.getBusinessFoundingDate?.split('T')[0]
+      filing.correction.legalType = this.getEntityType
+
       // filing.correction.startDate = ... // *** FUTURE: implement
     }
 
@@ -200,6 +206,26 @@ export default class FilingTemplateMixin extends Mixins(DateMixin) {
     return filing
   }
 
+  returnParties (parties: OrgPersonIF[]): OrgPersonIF[] {
+    return parties.map((item) => {
+      if (!item.deliveryAddress.streetAddressAdditional) item.deliveryAddress.streetAddressAdditional = ''
+      if (!item.deliveryAddress.deliveryInstructions) item.deliveryAddress.deliveryInstructions = ''
+      if (!item.mailingAddress.streetAddressAdditional) item.mailingAddress.streetAddressAdditional = ''
+      if (!item.mailingAddress.deliveryInstructions) item.mailingAddress.deliveryInstructions = ''
+      return item
+    })
+  }
+
+  returnOfficeAddresses (offices: AddressesIF): AddressesIF {
+    let newOffices = offices
+    if (!newOffices.businessOffice.deliveryAddress.deliveryInstructions) {
+      newOffices.businessOffice.deliveryAddress.deliveryInstructions = ''
+    }
+    if (!newOffices.businessOffice.mailingAddress.deliveryInstructions) {
+      newOffices.businessOffice.mailingAddress.deliveryInstructions = ''
+    }
+    return newOffices
+  }
   /**
    * Builds an alteration filing from store data.
    * @param isDraft whether this is a draft
